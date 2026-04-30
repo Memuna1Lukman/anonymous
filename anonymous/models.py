@@ -19,3 +19,4 @@ class Senders(Base):
     user_id = Column(Integer,ForeignKey("user.id",ondelete='CASCADE'),nullable=False)
     ids =   relationship("User")
     sent_at = Column(TIMESTAMP(timezone=True),nullable=False,server_default=text('now()'))
+    ip_address = Column(String)
