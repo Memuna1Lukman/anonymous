@@ -18,9 +18,9 @@ def confession_msg(request : Request,username_id:int,message:schemas.Message,lim
     window_minutes=timedelta(minutes=1)
     client_ip = request.client.host
     query_user=db.query(models.Senders).filter(
-        models.Senders.user_id == username_id,
-        models.Senders.sent_at >= (now-window_minutes),
-        models.Senders.ip_address == client_ip
+        models.Senders.ip_address == client_ip,
+        models.Senders.sent_at >= (now-window_minutes)
+        
     ).count()
     if query_user >= limit:
         raise HTTPException(status_code=status.HTTP_429_TOO_MANY_REQUESTS,detail=f"Too many requestions try after a minute") 
@@ -28,7 +28,7 @@ def confession_msg(request : Request,username_id:int,message:schemas.Message,lim
     sent_message['user_id'] = username_id
    
     sent_message = models.Senders(
-        content=message.content,
+        content=sent_message.content,
         user_id=username_id,
         ip_address=client_ip
     )
