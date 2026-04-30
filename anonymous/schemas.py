@@ -22,7 +22,7 @@ class Users(BaseModel):
     model_config = {"from_attributes": True}
 class Message(BaseModel):
     id: Optional[int] = None
-    name : Optional[str] = None
+    user_id : Optional[int] = None
     content : str
     sent_at: Optional[datetime] = None
 

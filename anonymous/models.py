@@ -16,6 +16,6 @@ class Senders(Base):
     __tablename__ = "senders"
     id = Column(Integer,primary_key=True)
     content = Column(String,index=True,nullable=False)
-    name = Column(String,ForeignKey("user.username",ondelete='CASCADE'),nullable=False)
-    names =   relationship("User")
+    user_id = Column(Integer,ForeignKey("user.id",ondelete='CASCADE'),nullable=False)
+    ids =   relationship("User")
     sent_at = Column(TIMESTAMP(timezone=True),nullable=False,server_default=text('now()'))
