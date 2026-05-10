@@ -11,7 +11,7 @@ router = APIRouter(
 
 @router.post("/{username_id}",status_code=status.HTTP_201_CREATED,response_model=schemas.MessageResponse)
 def confession_msg(request : Request,username_id:int,message:schemas.Message,limit=5,db:Session = Depends(get_db)):
-    user= db.query(models.User).filter(models.User.id==username_id).first()
+    user= db.query(models.User).filter(models.User.id == username_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     now= datetime.utcnow()
@@ -28,15 +28,15 @@ def confession_msg(request : Request,username_id:int,message:schemas.Message,lim
     sent_message['user_id'] = username_id
    
     sent_message = models.Senders(
-        content=sent_message.content,
-        user_id=username_id,
-        ip_address=client_ip
+        content = message.content,
+        ip_address = client_ip,
+        user_id=username_id
     )
     # Add rate limiting
     db.add(sent_message)
     db.commit()
     db.refresh(sent_message)
-    return {"status": "successful", "message": "Thank you for confessing"}
+    return sent_message
 
 
 

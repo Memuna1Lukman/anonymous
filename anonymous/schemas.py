@@ -5,7 +5,7 @@ from datetime import date,datetime
 class TokenData(BaseModel):
     id : Optional[int]
 
-
+#IPvAnyAddress
     
 
 
@@ -24,6 +24,7 @@ class Message(BaseModel):
     id: Optional[int] = None
     user_id : Optional[int] = None
     content : str
+    ip_address : Optional[str] = None
     sent_at: Optional[datetime] = None
 
 class MessageResponse(BaseModel):
