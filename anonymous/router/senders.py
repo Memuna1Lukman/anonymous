@@ -9,9 +9,9 @@ router = APIRouter(
 )
 
 
-@router.post("/{username_id}",status_code=status.HTTP_201_CREATED,response_model=schemas.MessageResponse)
-def confession_msg(request : Request,username_id:int,message:schemas.Message,limit=5,db:Session = Depends(get_db)):
-    user= db.query(models.User).filter(models.User.id == username_id).first()
+@router.post("/{username}",status_code=status.HTTP_201_CREATED,response_model=schemas.MessageResponse)
+def confession_msg(request : Request,username:str,message:schemas.Message,limit=5,db:Session = Depends(get_db)):
+    user= db.query(models.User).filter(models.User.username == username).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     now= datetime.utcnow()
@@ -25,12 +25,12 @@ def confession_msg(request : Request,username_id:int,message:schemas.Message,lim
     if query_user >= limit:
         raise HTTPException(status_code=status.HTTP_429_TOO_MANY_REQUESTS,detail=f"Too many requestions try after a minute") 
     sent_message = message.dict()
-    sent_message['user_id'] = username_id
+    sent_message['username'] = username
    
     sent_message = models.Senders(
         content = message.content,
         ip_address = client_ip,
-        user_id=username_id
+        user=username
     )
     # Add rate limiting
     db.add(sent_message)

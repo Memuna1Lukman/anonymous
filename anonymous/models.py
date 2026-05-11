@@ -11,12 +11,12 @@ class User(Base):
     username = Column(String,index=True,nullable=False,unique=True)
     password = Column(String,nullable=False)
     created_at = Column(TIMESTAMP(timezone=True),nullable=False,server_default=text('now()'))
-    
+    sender = relationship("Senders",back_populates="users")
 class Senders(Base):
     __tablename__ = "senders"
     id = Column(Integer,primary_key=True)
     content = Column(String,index=True,nullable=False)
-    user_id = Column(Integer,ForeignKey("user.id",ondelete='CASCADE'),nullable=False)
-    ids =   relationship("User")
+    user = Column(String,ForeignKey("user.username",ondelete='CASCADE'),nullable=False)
+    users =   relationship("User",back_populates="sender")
     sent_at = Column(TIMESTAMP(timezone=True),nullable=False,server_default=text('now()'))
     ip_address = Column(String,nullable=False)

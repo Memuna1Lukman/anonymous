@@ -1,8 +1,8 @@
-"""New database
+"""Initial migration
 
-Revision ID: 0d878899b11d
+Revision ID: 7856f1231810
 Revises: 
-Create Date: 2026-04-30 15:05:13.099394
+Create Date: 2026-05-11 10:24:00.301092
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '0d878899b11d'
+revision: str = '7856f1231810'
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -34,9 +34,10 @@ def upgrade() -> None:
     op.create_table('senders',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('content', sa.String(), nullable=False),
-    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.Column('user', sa.String(), nullable=False),
     sa.Column('sent_at', sa.TIMESTAMP(timezone=True), server_default=sa.text('now()'), nullable=False),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE'),
+    sa.Column('ip_address', sa.String(), nullable=False),
+    sa.ForeignKeyConstraint(['user'], ['user.username'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_senders_content'), 'senders', ['content'], unique=False)
